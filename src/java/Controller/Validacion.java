@@ -78,8 +78,11 @@ public class Validacion extends HttpServlet {
             String user = request.getParameter("txtuser");
             String pass = request.getParameter("txtpass");
             em = eDao.validar(user, pass);
-            if(em.getUser()!=null)
+            if(em.getUser()!=null){
+                request.setAttribute("usuario", em);
                 request.getRequestDispatcher("Controller?accion=Main").forward(request, response);
+            }
+                
             else
                 request.getRequestDispatcher("index.jsp").forward(request, response);
         }
