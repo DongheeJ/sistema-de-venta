@@ -1,0 +1,6 @@
+lib/
+test/
+nbproject/
+build.xml
+web/META-INF
+web/WEB-INF
