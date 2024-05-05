@@ -50,7 +50,7 @@ public class EmpleadoDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Empleado em = new Empleado();
-                em.setId(rs.getInt("idEmpleado"));
+                em.setId(rs.getInt("IdEmpleado"));
                 em.setUser(rs.getString("User"));
                 em.setDni(rs.getString("Dni"));
                 em.setNom(rs.getString("Nombres"));

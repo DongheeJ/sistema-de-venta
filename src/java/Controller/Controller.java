@@ -4,6 +4,8 @@
  */
 package Controller;
 
+import Model.Cliente;
+import Model.ClienteDAO;
 import Model.Empleado;
 import Model.EmpleadoDAO;
 import java.io.IOException;
@@ -23,6 +25,8 @@ public class Controller extends HttpServlet {
     Empleado em = new Empleado();
     EmpleadoDAO eDao = new EmpleadoDAO();
     int idEmp;
+    Cliente cl = new Cliente();
+    ClienteDAO cDao = new ClienteDAO();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -89,6 +93,18 @@ public class Controller extends HttpServlet {
             request.getRequestDispatcher("Producto.jsp").forward(request, response);
         }
         if (menu.equals("NuevaVenta")) {
+            System.out.println(accion);
+            if(accion!=null){
+                switch (accion) {
+                case "BuscarCliente":
+                    String dni = request.getParameter("codigocliente");
+                    cl = cDao.buscar(dni);
+                    request.setAttribute("c", cl);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+            }
             request.getRequestDispatcher("NuevaVenta.jsp").forward(request, response);
         }
 
