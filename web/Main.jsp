@@ -20,16 +20,16 @@
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Controller?accion=Producto" target="myFrame">Producto</a>
+                        <a class="nav-link" href="Controller?menu=Producto" target="myFrame">Producto</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Controller?accion=Empleado" target="myFrame">Empleado</a>
+                        <a class="nav-link" href="Controller?menu=Empleado&accion=Listar" target="myFrame">Empleado</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Controller?accion=Cliente" target="myFrame">Clientes</a>
+                        <a class="nav-link" href="Controller?menu=Cliente" target="myFrame">Clientes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Controller?accion=NuevaVenta" target="myFrame">Nueva Venta</a>
+                        <a class="nav-link" href="Controller?menu=NuevaVenta" target="myFrame">Nueva Venta</a>
                     </li>
                 </ul>
                 <div class="dropdown">
@@ -48,7 +48,7 @@
             </div>
         </nav>
                         <div class="m-4" style="height: 550px;">
-                            <iframe name="myFrame" style="height: 100%; width: 100%">
+                            <iframe name="myFrame" style="height: 100%; width: 100%; border: none">
 
                             </iframe>
                         </div>                
