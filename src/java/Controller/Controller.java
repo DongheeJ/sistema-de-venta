@@ -19,6 +19,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,9 +111,96 @@ public class Controller extends HttpServlet {
             request.getRequestDispatcher("Empleado.jsp").forward(request, response);
         }
         if (menu.equals("Cliente")) {
+            switch (accion) {
+                case "Listar":
+                    List<Cliente> list = cDao.listar();
+                    request.setAttribute("clientes", list);
+                    break;
+                case "Agregar":
+                    String dni = request.getParameter("txtDni");
+                    String nom = request.getParameter("txtNom");
+                    String dir = request.getParameter("txtDirec");
+                    String estado = request.getParameter("txtEstado");
+                    cl.setDni(dni);
+                    cl.setEstado(estado);
+                    cl.setNom(nom);
+                    cl.setAdress(dir);
+                    cDao.agregar(cl);
+                    request.getRequestDispatcher("Controller?menu=Cliente&accion=Listar").forward(request, response);
+                    break;
+                case "Editar":
+                    idCl = Integer.parseInt(request.getParameter("id"));
+                    Cliente temp = cDao.listarId(idCl);
+                    request.setAttribute("porAcutalizar", temp);
+                    request.getRequestDispatcher("Controller?menu=Cliente&accion=Listar").forward(request, response);
+                    break;
+                case "Actualizar":
+                    String dni1 = request.getParameter("txtDni");
+                    String nom1 = request.getParameter("txtNom");
+                    String dirl = request.getParameter("txtDirec");
+                    String estado1 = request.getParameter("txtEstado");
+                    cl.setDni(dni1);
+                    cl.setEstado(estado1);
+                    cl.setNom(nom1);
+                    cl.setAdress(dirl);
+                    cl.setId(idCl);
+                    cDao.actualizar(cl);
+                    request.getRequestDispatcher("Controller?menu=Cliente&accion=Listar").forward(request, response);
+                    break;
+                case "Delete":
+                    idCl = Integer.parseInt(request.getParameter("id"));
+                    cDao.delete(idCl);
+                    request.getRequestDispatcher("Controller?menu=Cliente&accion=Listar").forward(request, response);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
             request.getRequestDispatcher("Cliente.jsp").forward(request, response);
         }
         if (menu.equals("Producto")) {
+            switch (accion) {
+                case "Listar":
+                    List<Producto> list = pDao.listar();
+                    request.setAttribute("productos", list);
+                    break;
+                case "Agregar":
+                    String nom = request.getParameter("txtNom");
+                    double precio = Double.parseDouble(request.getParameter("txtPrecio"));
+                    int stock = Integer.parseInt(request.getParameter("txtStock"));
+                    String estado = request.getParameter("txtEstado");
+                    pr.setNom(nom);
+                    pr.setPrecio(precio);
+                    pr.setStock(stock);
+                    pr.setEstado(estado);
+                    pDao.agregar(pr);
+                    request.getRequestDispatcher("Controller?menu=Producto&accion=Listar").forward(request, response);
+                    break;
+                case "Editar":
+                    idPr = Integer.parseInt(request.getParameter("id"));
+                    Producto temp = pDao.listarId(idPr);
+                    request.setAttribute("porAcutalizar", temp);
+                    request.getRequestDispatcher("Controller?menu=Producto&accion=Listar").forward(request, response);
+                    break;
+                case "Actualizar":
+                    String nom1 = request.getParameter("txtNom");
+                    double precio1 = Double.parseDouble(request.getParameter("txtPrecio"));
+                    int stock1 = Integer.parseInt(request.getParameter("txtStock"));
+                    String estado1 = request.getParameter("txtEstado");
+                    pr.setEstado(estado1);
+                    pr.setNom(nom1);
+                    pr.setId(idPr);
+                    pr.setStock(stock1);
+                    pDao.actualizar(pr);
+                    request.getRequestDispatcher("Controller?menu=Producto&accion=Listar").forward(request, response);
+                    break;
+                case "Delete":
+                    idPr = Integer.parseInt(request.getParameter("id"));
+                    pDao.delete(idPr);
+                    request.getRequestDispatcher("Controller?menu=Producto&accion=Listar").forward(request, response);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
             request.getRequestDispatcher("Producto.jsp").forward(request, response);
         }
         if (menu.equals("NuevaVenta")) {
@@ -137,6 +225,7 @@ public class Controller extends HttpServlet {
                     totalPagar = 0.0;
                     item++;
                     cod = pr.getId();
+                    idPr = Integer.parseInt(request.getParameter("codigoproducto"));
                     descripcion = request.getParameter("nombreProducto");
                     precio = Double.parseDouble(request.getParameter("precio"));
                     cant = Integer.parseInt(request.getParameter("cant"));
@@ -144,6 +233,7 @@ public class Controller extends HttpServlet {
                     v = new Venta();
                     v.setItem(item);
                     v.setId(cod);
+                    v.setIdProducto(idPr);
                     v.setDescripcionP(descripcion);
                     v.setPrecio(precio);
                     v.setCantidad(cant);
@@ -155,18 +245,45 @@ public class Controller extends HttpServlet {
                     request.setAttribute("totalPagar", totalPagar);
                     request.setAttribute("list", list);
                     break;
+                case "GenerarVenta":
+                    for (Venta vnt : list) {
+                        Producto p = new Producto();
+                        int cantidad = vnt.getCantidad();
+                        int idProducto = vnt.getIdProducto();
+                        ProductoDAO dao =new ProductoDAO();
+                        p = dao.buscarId(idProducto);
+                        int sac = p.getStock() - cantidad;
+                        dao.actualizarStock(idProducto, sac);
+                    }
+                    v.setIdCliente(cl.getId());
+                    v.setIdEmpleado(2);
+                    v.setNserie(nSerie);
+                    v.setFecha("2022-03-01");
+                    v.setMonto(totalPagar);
+                    v.setEstado("1");
+                    vDao.guardarVenta(v);
+                    int idV = Integer.parseInt(vDao.IdVentas());
+                    for (Venta vnt : list) {
+                        v = new Venta();
+                        v.setId(idV);
+                        v.setIdProducto(vnt.getIdProducto());
+                        v.setCantidad(vnt.getCantidad());
+                        v.setPrecio(vnt.getPrecio());
+                        vDao.guardarDetalleventas(v);
+                    }
+                    list.removeAll(list);
+                    break;
                 default:
                     nSerie = vDao.GenerarSerie();
                     if (nSerie == null) {
                         nSerie = "00000001";
-                        request.setAttribute("nSerie", nSerie);
                     } else {
                         int increment = Integer.parseInt(nSerie);
                         GenerarSerie gs = new GenerarSerie();
                         nSerie = gs.nSerie(increment);
-                        request.setAttribute("nSerie", nSerie);
                     }
             }
+            request.setAttribute("nSerie", nSerie);
             request.getRequestDispatcher("NuevaVenta.jsp").forward(request, response);
         }
 

@@ -13,12 +13,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
         <title>VENTAS</title>
+        <style>
+            @media print{
+                .parte01, .btn, .accion{
+                    display: none;
+                }
+            }
+        </style>
     </head>
     <body>
         <div class="d-flex">
             <div class="col-sm-4">
                 <div class="card">
-                    <<form action="Controller?menu=NuevaVenta" method="POST">
+                    <form action="Controller?menu=NuevaVenta" method="POST">
                         <div class="card-body">
                             <div class="form-group">
                                 <label>Datos cliente</label>
@@ -81,7 +88,7 @@
                                     <th>Precio</th>
                                     <th>Cantidad</th>
                                     <th>Subtotal</th>
-                                    <th>Acciones</th>
+                                    <th class="accion">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -104,7 +111,7 @@
                     </div>
                     <div class="card-footer d-flex">
                         <div class="col-sm-6">
-                            <input type="submit" name="accion" value="Generar Venta" class="btn btn-success">
+                            <a href="Controller?menu=NuevaVenta&accion=GenerarVenta" onclick="print()" class="btn btn-success">Generar Venta</a>
                             <input type="submit" name="accion" value="Cancelar" class="btn btn-danger">
                         </div>
                         <div class="col-sm-3 ml-auto">
