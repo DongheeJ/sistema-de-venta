@@ -29,7 +29,7 @@
                         <a class="nav-link" href="Controller?menu=Cliente" target="myFrame">Clientes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Controller?menu=NuevaVenta" target="myFrame">Nueva Venta</a>
+                        <a class="nav-link" href="Controller?menu=NuevaVenta&accion=Inicio" target="myFrame">Nueva Venta</a>
                     </li>
                 </ul>
                 <div class="dropdown">

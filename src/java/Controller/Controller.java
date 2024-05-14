@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Config.GenerarSerie;
 import Model.Cliente;
 import Model.ClienteDAO;
 import Model.Empleado;
@@ -11,6 +12,7 @@ import Model.EmpleadoDAO;
 import Model.Producto;
 import Model.ProductoDAO;
 import Model.Venta;
+import Model.VentaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -35,8 +37,8 @@ public class Controller extends HttpServlet {
     Producto pr = new Producto();
     ProductoDAO pDao = new ProductoDAO();
     int idPr;
-    
-    Venta v= new Venta();
+
+    Venta v = new Venta();
     List<Venta> list = new ArrayList<>();
     int item;
     int cod;
@@ -45,7 +47,10 @@ public class Controller extends HttpServlet {
     int cant;
     double subtotal;
     double totalPagar;
-    
+
+    String nSerie;
+    VentaDAO vDao = new VentaDAO();
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
@@ -111,21 +116,24 @@ public class Controller extends HttpServlet {
             request.getRequestDispatcher("Producto.jsp").forward(request, response);
         }
         if (menu.equals("NuevaVenta")) {
-            
-            if(accion!=null){
-                switch (accion) {
+            switch (accion) {
                 case "BuscarCliente":
                     String dni = request.getParameter("codigocliente");
                     cl = cDao.buscar(dni);
                     request.setAttribute("c", cl);
+                    request.setAttribute("list", list);
+                    request.setAttribute("totalPagar", totalPagar);
                     break;
                 case "BuscarProducto":
                     int id = Integer.parseInt(request.getParameter("codigoproducto"));
                     pr = pDao.listarId(id);
+                    request.setAttribute("c", cl);
                     request.setAttribute("pr", pr);
                     request.setAttribute("list", list);
+                    request.setAttribute("totalPagar", totalPagar);
                     break;
                 case "Agregar":
+                    request.setAttribute("c", cl);
                     totalPagar = 0.0;
                     item++;
                     cod = pr.getId();
@@ -141,15 +149,23 @@ public class Controller extends HttpServlet {
                     v.setCantidad(cant);
                     v.setSubtotal(subtotal);
                     list.add(v);
-                    for(Venta vnt : list){
+                    for (Venta vnt : list) {
                         totalPagar = totalPagar + vnt.getSubtotal();
                     }
                     request.setAttribute("totalPagar", totalPagar);
                     request.setAttribute("list", list);
                     break;
                 default:
-                    throw new AssertionError();
-            }
+                    nSerie = vDao.GenerarSerie();
+                    if (nSerie == null) {
+                        nSerie = "00000001";
+                        request.setAttribute("nSerie", nSerie);
+                    } else {
+                        int increment = Integer.parseInt(nSerie);
+                        GenerarSerie gs = new GenerarSerie();
+                        nSerie = gs.nSerie(increment);
+                        request.setAttribute("nSerie", nSerie);
+                    }
             }
             request.getRequestDispatcher("NuevaVenta.jsp").forward(request, response);
         }
