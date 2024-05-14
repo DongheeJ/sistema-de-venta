@@ -9,12 +9,12 @@ package Model;
  * @author jodon
  */
 public class Empleado {
-    int id;
-    String dni;
-    String nom;
-    String tel;
-    String estado;
-    String user;
+    private int id;
+    private String dni;
+    private String nom;
+    private String tel;
+    private String estado;
+    private String user;
 
     public Empleado() {
     }
@@ -74,6 +74,11 @@ public class Empleado {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Empleado{" + "id=" + id + ", dni=" + dni + ", nom=" + nom + ", tel=" + tel + ", estado=" + estado + ", user=" + user + '}';
     }
     
 }

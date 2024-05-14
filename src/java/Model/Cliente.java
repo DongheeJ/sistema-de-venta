@@ -9,11 +9,11 @@ package Model;
  * @author jodon
  */
 public class Cliente {
-    int id;
-    String dni;
-    String nom;
-    String adress;
-    String estado;
+    private int id;
+    private String dni;
+    private String nom;
+    private String adress;
+    private String estado;
 
     public Cliente() {
     }
@@ -64,6 +64,11 @@ public class Cliente {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" + "id=" + id + ", dni=" + dni + ", nom=" + nom + ", adress=" + adress + ", estado=" + estado + '}';
     }
     
 }

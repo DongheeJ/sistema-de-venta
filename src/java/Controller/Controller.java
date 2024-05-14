@@ -8,12 +8,16 @@ import Model.Cliente;
 import Model.ClienteDAO;
 import Model.Empleado;
 import Model.EmpleadoDAO;
+import Model.Producto;
+import Model.ProductoDAO;
+import Model.Venta;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +31,21 @@ public class Controller extends HttpServlet {
     int idEmp;
     Cliente cl = new Cliente();
     ClienteDAO cDao = new ClienteDAO();
-
+    int idCl;
+    Producto pr = new Producto();
+    ProductoDAO pDao = new ProductoDAO();
+    int idPr;
+    
+    Venta v= new Venta();
+    List<Venta> list = new ArrayList<>();
+    int item;
+    int cod;
+    String descripcion;
+    double precio;
+    int cant;
+    double subtotal;
+    double totalPagar;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
@@ -93,13 +111,41 @@ public class Controller extends HttpServlet {
             request.getRequestDispatcher("Producto.jsp").forward(request, response);
         }
         if (menu.equals("NuevaVenta")) {
-            System.out.println(accion);
+            
             if(accion!=null){
                 switch (accion) {
                 case "BuscarCliente":
                     String dni = request.getParameter("codigocliente");
                     cl = cDao.buscar(dni);
                     request.setAttribute("c", cl);
+                    break;
+                case "BuscarProducto":
+                    int id = Integer.parseInt(request.getParameter("codigoproducto"));
+                    pr = pDao.listarId(id);
+                    request.setAttribute("pr", pr);
+                    request.setAttribute("list", list);
+                    break;
+                case "Agregar":
+                    totalPagar = 0.0;
+                    item++;
+                    cod = pr.getId();
+                    descripcion = request.getParameter("nombreProducto");
+                    precio = Double.parseDouble(request.getParameter("precio"));
+                    cant = Integer.parseInt(request.getParameter("cant"));
+                    subtotal = precio * cant;
+                    v = new Venta();
+                    v.setItem(item);
+                    v.setId(cod);
+                    v.setDescripcionP(descripcion);
+                    v.setPrecio(precio);
+                    v.setCantidad(cant);
+                    v.setSubtotal(subtotal);
+                    list.add(v);
+                    for(Venta vnt : list){
+                        totalPagar = totalPagar + vnt.getSubtotal();
+                    }
+                    request.setAttribute("totalPagar", totalPagar);
+                    request.setAttribute("list", list);
                     break;
                 default:
                     throw new AssertionError();
