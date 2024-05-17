@@ -102,7 +102,7 @@ public class ClienteDAO {
             ps.setString(2, cl.getNom());
             ps.setString(3, cl.getAdress());
             ps.setString(4, cl.getEstado());
-            ps.setInt(6, cl.getId());
+            ps.setInt(5, cl.getId());
             ps.executeUpdate();
         } catch (Exception e){
             

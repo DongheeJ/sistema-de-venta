@@ -13,9 +13,9 @@ import java.sql.DriverManager;
  */
 public class Conexion {
     Connection con;
-    String url = "jdbc:mysql://localhost:3307/parcial2ava";
+    String url = "jdbc:mysql://localhost:3306/parcial2ava";
     String user = "root";
-    String password = "";
+    String password = "jsnvrns99";
     public Connection Conexion(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
