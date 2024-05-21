@@ -271,6 +271,7 @@ public class Controller extends HttpServlet {
                         v.setPrecio(vnt.getPrecio());
                         vDao.guardarDetalleventas(v);
                     }
+                    totalPagar = 0;
                     list.removeAll(list);
                     break;
                 default:
