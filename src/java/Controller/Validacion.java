@@ -12,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -30,6 +31,7 @@ public class Validacion extends HttpServlet {
      */
     EmpleadoDAO eDao = new EmpleadoDAO();
     Empleado em = new Empleado();
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -38,7 +40,7 @@ public class Validacion extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Validacion</title>");            
+            out.println("<title>Servlet Validacion</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Validacion at " + request.getContextPath() + "</h1>");
@@ -59,7 +61,7 @@ public class Validacion extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
     }
 
     /**
@@ -74,20 +76,20 @@ public class Validacion extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
-        if(accion.equalsIgnoreCase("Ingresar")){
+        if (accion.equalsIgnoreCase("Ingresar")) {
             String user = request.getParameter("txtuser");
             String pass = request.getParameter("txtpass");
             em = eDao.validar(user, pass);
-            if(em.getUser()!=null){
-                request.setAttribute("usuario", em);
+            if (em.getUser() != null) {
+                HttpSession miSession = request.getSession(true);
+                miSession.setAttribute("usuario", em);
                 request.getRequestDispatcher("Controller?menu=Main").forward(request, response);
-            }
-                
-            else
+            } else {
                 request.getRequestDispatcher("index.jsp").forward(request, response);
-        }
-        else
+            }
+        } else {
             request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
     }
 
     /**

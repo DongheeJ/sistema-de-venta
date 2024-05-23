@@ -19,6 +19,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,8 @@ public class Controller extends HttpServlet {
         String accion = request.getParameter("accion");
         String menu = request.getParameter("menu");
         if (menu.equals("Main")) {
+            HttpSession miSession = request.getSession(true);
+            miSession.setAttribute("usuario", miSession.getAttribute("usuario"));
             request.getRequestDispatcher("Main.jsp").forward(request, response);
         }
         if (menu.equals("Empleado")) {
