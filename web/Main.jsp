@@ -62,6 +62,6 @@
 </html>
 <%
     } else {
-        request.getRequestDispatcher("Error.jsp?redireccion = index.jsp").forward(request, response);
+        request.getRequestDispatcher("Error.jsp?redireccion=index.jsp").forward(request, response);
     }
 %>

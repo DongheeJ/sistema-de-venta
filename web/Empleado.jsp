@@ -7,6 +7,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="Model.Empleado" %>
+<%
+    HttpSession val = request.getSession(true);
+    if (val != null && val.getAttribute("usuario") != null) {
+%>
 <!doctype html>
 <html lang="en">
     <head>
@@ -90,3 +94,8 @@
 
     </body>
 </html>
+<%
+    } else {
+        request.getRequestDispatcher("Error.jsp?redireccion=index.jsp").forward(request, response);
+    }
+%>
