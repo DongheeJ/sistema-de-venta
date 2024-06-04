@@ -33,7 +33,7 @@
                         <a class="nav-link" href="Controller?menu=Cliente&accion=Listar" target="myFrame">Clientes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Controller?menu=NuevaVenta&accion=Inicio" target="myFrame">Nueva Venta</a>
+                        <a class="nav-link" href="Controller?menu=NuevaVenta&accion=Inicio&idEmp=${usuario.getId()}" target="myFrame">Nueva Venta</a>
                     </li>
                 </ul>
                 <div class="dropdown">

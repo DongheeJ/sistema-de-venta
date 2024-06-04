@@ -14,13 +14,11 @@ import Model.ProductoDAO;
 import Model.Venta;
 import Model.VentaDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -192,6 +190,7 @@ public class Controller extends HttpServlet {
                     pr.setEstado(estado1);
                     pr.setNom(nom1);
                     pr.setId(idPr);
+                    pr.setPrecio(precio1);
                     pr.setStock(stock1);
                     pDao.actualizar(pr);
                     request.getRequestDispatcher("Controller?menu=Producto&accion=Listar").forward(request, response);
@@ -242,7 +241,24 @@ public class Controller extends HttpServlet {
                     v.setCantidad(cant);
                     v.setSubtotal(subtotal);
                     list.add(v);
+                    System.out.println(list.size());
                     for (Venta vnt : list) {
+                        totalPagar = totalPagar + vnt.getSubtotal();
+                    }
+                    request.setAttribute("totalPagar", totalPagar);
+                    request.setAttribute("list", list);
+                    break;
+                case "Delete":
+                    request.setAttribute("c", cl);
+                    totalPagar = 0.0;
+                    int item = Integer.parseInt(request.getParameter("item"));
+                    this.item--;
+                    list.remove(item - 1);
+                    System.out.println(list.size());
+                    for (Venta vnt : list) {
+                        if (item < list.size() + 1 && vnt.getItem() > item) {
+                            vnt.setItem(vnt.getItem() - 1);
+                        }
                         totalPagar = totalPagar + vnt.getSubtotal();
                     }
                     request.setAttribute("totalPagar", totalPagar);
@@ -253,13 +269,13 @@ public class Controller extends HttpServlet {
                         Producto p = new Producto();
                         int cantidad = vnt.getCantidad();
                         int idProducto = vnt.getIdProducto();
-                        ProductoDAO dao =new ProductoDAO();
+                        ProductoDAO dao = new ProductoDAO();
                         p = dao.buscarId(idProducto);
                         int sac = p.getStock() - cantidad;
                         dao.actualizarStock(idProducto, sac);
                     }
                     v.setIdCliente(cl.getId());
-                    v.setIdEmpleado(2);
+                    v.setIdEmpleado(idEmp);
                     v.setNserie(nSerie);
                     v.setFecha("2022-03-01");
                     v.setMonto(totalPagar);
@@ -274,10 +290,17 @@ public class Controller extends HttpServlet {
                         v.setPrecio(vnt.getPrecio());
                         vDao.guardarDetalleventas(v);
                     }
+                    this.item = 0;
+                    totalPagar = 0;
+                    list.removeAll(list);
+                    break;
+                case "Cancelar":
+                    this.item = 0;
                     totalPagar = 0;
                     list.removeAll(list);
                     break;
                 default:
+                    idEmp = Integer.parseInt(request.getParameter("idEmp"));
                     nSerie = vDao.GenerarSerie();
                     if (nSerie == null) {
                         nSerie = "00000001";

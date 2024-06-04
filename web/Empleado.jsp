@@ -55,12 +55,12 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
+                            <td>ID</td>
                             <td>DNI</td>
                             <td>Nombres</td>
                             <td>Telefono</td>
                             <td>Estado</td>
                             <td>User</td>
-                            <td>Acciones</td>
                         </tr>
                     </thead>
                     <tbody>

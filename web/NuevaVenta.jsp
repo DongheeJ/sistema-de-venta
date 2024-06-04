@@ -63,7 +63,7 @@
                                     <input type="number" value="1" name="cant" placeholder="" class="form-control">
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="text" name="stock" value="${pr.getStock()} placeholder="stock" class="form-control">
+                                    <input type="text" name="stock" value="${pr.getStock()}" placeholder="stock" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -105,8 +105,8 @@
                                         <td>${l.getCantidad()}</td>
                                         <td>${l.getSubtotal()}</td>
                                         <td class="d-flex">
-                                            <a href="#" class="btn btn-warning">Editar</a>
-                                            <a href="#" class="btn btn-danger" style="margin-left: 10px">Delete</a>
+                                            <a href="Controller?menu=NuevaVenta&accion=Delete&item=${l.getItem()}" 
+                                               class="btn btn-danger" style="margin-left: 10px">Delete</a>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -116,7 +116,7 @@
                     <div class="card-footer d-flex">
                         <div class="col-sm-6">
                             <a href="Controller?menu=NuevaVenta&accion=GenerarVenta" onclick="print()" class="btn btn-success">Generar Venta</a>
-                            <input type="submit" name="accion" value="Cancelar" class="btn btn-danger">
+                            <a href="Controller?menu=NuevaVenta&accion=Cancelar" class="btn btn-success">Cancelar</a>
                         </div>
                         <div class="col-sm-3 ml-auto">
                             <input type="text" name="txtTotal" value="$ ${totalPagar}0" class="form-control">

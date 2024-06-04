@@ -50,11 +50,11 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
+                            <td>Id</td>
                             <td>DNI</td>
                             <td>Nombres</td>
                             <td>Direccion</td>
                             <td>Estado</td>
-                            <td>Acciones</td>
                         </tr>
                     </thead>
                     <tbody>
